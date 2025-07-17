@@ -1,0 +1,145 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* border: 1px solid black; */
+}
+
+.container {
+  /* border: 1px solid red; */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+}
+
+.heading {
+  margin-top: 20px;
+}
+
+.heading > h2 {
+  font-size: 3em;
+  font-family: "Manufacturing Consent", system-ui;
+}
+
+button {
+  cursor: pointer;
+}
+
+.btn-container {
+  width: 800px;
+  height: 40px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  padding: 5px;
+}
+
+.add-btn {
+  height: 35px;
+  width: 90px;
+  border-radius: 4px;
+  border: none;
+  background-color: rgb(59, 173, 255);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.library-container {
+  margin-top: 10px;
+  width: 800px;
+  height: 80%;
+  box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset,
+    rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
+  border-radius: 6px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 15em);
+  gap: 6px;
+  /* overflow-y: auto; */
+  position: relative;
+}
+
+.book-card {
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.title-name,
+.author-name,
+.pages-num {
+  font-family: "Inconsolata", monospace;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-size: 0.8rem;
+}
+
+dialog {
+  width: 300px;
+  height: 350px;
+  position: absolute;
+  top: 15%;
+  left: 55%;
+  bottom: -50%;
+  right: -50%;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  gap: 10px;
+  height: 90%;
+  padding: 5px;
+}
+
+input {
+  height: 30px;
+  padding: 3px;
+  border: none;
+  border-bottom: 1px groove gray;
+  outline: none;
+}
+
+[type="checkbox"] {
+  vertical-align: middle;
+}
+
+.submit-btn {
+  width: 30%;
+  height: 30px;
+  border-radius: 6px;
+  background-color: rgb(94, 225, 116);
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
+  border: 1px groove rgba(144, 142, 142, 0.466);
+}
+
+.close-btn {
+  border: none;
+  background: none;
+}
+
+.remove-btn {
+  background-color: #ef233c;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+}
+
+.status-btn {
+  border-radius: 20px;
+  background-color: rgb(241, 217, 59);
+  width: 60px;
+  text-align: center;
+  border: none;
+}
