@@ -145,6 +145,7 @@ function resetForm() {
 function initializeLibrary() {
   addBookToLibrary("The Meditations", "Marcus Aurelius", 600, "Read");
   addBookToLibrary("Talk Like Ted", "Carmine Gallo", 263, "Unread");
+
   console.log(myLibrary);
 }
 
