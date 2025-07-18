@@ -20,6 +20,7 @@ function Book(title, author, pages, status, id) {
     (this.id = id);
 }
 
+// Function to create elements to avoid write repetitive code
 function createElement(tag, attributes = {}, textContent = "") {
   const element = document.createElement(tag);
   Object.entries(attributes).forEach(([key, value]) => {
@@ -47,12 +48,13 @@ function handleFormSubmission() {
 }
 
 function addBookToLibrary(title, author, pages, status) {
-  const id = self.crypto.randomUUID();
+  const id = self.crypto.randomUUID(); // Generate random unique id for each books
   const newBook = new Book(title, author, pages, status, id);
   myLibrary.push(newBook);
   displayBooks();
 }
 
+// Display book status iterates to the myLibrary
 function toggleBookStatus(bookId) {
   const book = myLibrary.find((book) => book.id === bookId);
   if (book) {
@@ -69,6 +71,7 @@ function deleteBook(id) {
   }
 }
 
+// Creating the book
 function createBookCard(book) {
   const card = createElement("div", {
     class: "book-card",
@@ -123,6 +126,7 @@ function createBookCard(book) {
   return card;
 }
 
+// Display the book and append the card
 function displayBooks() {
   libraryContainer.innerHTML = "";
   myLibrary.forEach((book) => {

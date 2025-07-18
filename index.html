@@ -21,7 +21,7 @@
   <body>
     <div class="container">
       <div class="heading"><h2>Book library</h2></div>
-      <dialog id="dialog">
+      <dialog id="dialog" closedby="any">
         <div class="close-btn-wrapper">
           <button class="close-btn" id="close-btn" type="button">
             <svg
@@ -41,35 +41,43 @@
             </svg>
           </button>
         </div>
-        <form action="" class="form">
+        <form action="#" class="form">
           <label for="author-name">Author:</label>
           <input
             type="text"
-            name="text"
+            name="author"
             id="author-name"
             class="author-name"
             placeholder="John Milton"
+            minlength="2"
+            maxlength="100"
+            required
           />
           <label for="book-name">Title:</label>
           <input
             type="text"
-            name="text"
+            name="title"
             id="book-name"
             class="book-name"
             placeholder="Paradise Lost"
+            minlength="1"
+            maxlength="200"
+            required
           />
           <label for="page-number">Page:</label>
           <input
             type="number"
-            name="number"
+            name="pages"
             id="page-number"
             class="page-number"
             placeholder="512"
+            minlength="1"
+            maxlength="200"
+            required
           />
           <label for="checkbox-yes"
             >Read?
             <input
-              type="checkbox"
               type="checkbox"
               class="checkbox-yes"
               id="checkbox-yes"
