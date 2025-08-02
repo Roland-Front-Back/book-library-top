@@ -1,6 +1,6 @@
 <br>
 <div>
-<img src="img/library.png" width="5%">
+<img src="img/library.png" width="20%">
 </div>
 <br>
 
