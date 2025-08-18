@@ -10,148 +10,162 @@ const bookValue = document.querySelector("#book-name");
 const pagesValue = document.querySelector("#page-number");
 const readStatus = document.querySelector("#checkbox-yes");
 
-const myLibrary = [];
-
-function Book(title, author, pages, status, id) {
-  (this.title = title),
-    (this.author = author),
-    (this.pages = pages),
-    (this.status = status),
-    (this.id = id);
-}
-
-// Function to create elements to avoid write repetitive code
-function createElement(tag, attributes = {}, textContent = "") {
-  const element = document.createElement(tag);
-  Object.entries(attributes).forEach(([key, value]) => {
-    element.setAttribute(key, value);
-  });
-  if (textContent) element.textContent = textContent;
-  return element;
-}
-
-function handleFormSubmission() {
-  if (!authorValue.value || !bookValue.value || !pagesValue.value) {
-    alert("Please enter author,book name, and page number!");
-    return;
-  }
-
-  const status = readStatus.checked ? "Read" : "Unread";
-  addBookToLibrary(
-    bookValue.value,
-    authorValue.value,
-    pagesValue.value,
-    status
-  );
-  resetForm();
-  showDialog.close();
-}
-
-function addBookToLibrary(title, author, pages, status) {
-  const id = self.crypto.randomUUID(); // Generate random unique id for each books
-  const newBook = new Book(title, author, pages, status, id);
-  myLibrary.push(newBook);
-  displayBooks();
-}
-
-// Display book status iterates to the myLibrary
-function toggleBookStatus(bookId) {
-  const book = myLibrary.find((book) => book.id === bookId);
-  if (book) {
-    book.status = book.status === "Read" ? "Unread" : "Read";
-    displayBooks();
+class Book {
+  constructor(title, author, pages, status, id) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.status = status;
+    this.id = id;
   }
 }
 
-function deleteBook(id) {
-  const bookIndex = myLibrary.findIndex((book) => book.id === id);
-  if (bookIndex !== -1) {
-    myLibrary.splice(bookIndex, 1);
-    displayBooks();
+class BookUI {
+  constructor(tag, attributes = {}, textContent = "") {
+    this.tag = tag;
+    this.attributes = attributes;
+    this.textContent = textContent;
+  }
+
+  createElement() {
+    const element = document.createElement(this.tag);
+    Object.entries(this.attributes).forEach(([key, value]) => {
+      element.setAttribute(key, value);
+    });
+    if (this.textContent) element.textContent = this.textContent;
+    return element;
+  }
+
+  createBookCard(book, { toggleBookStatus, deleteBook }) {
+    const card = new BookUI("div", {
+      class: "book-card",
+      id: book.id,
+    }).createElement();
+
+    const title = new BookUI(
+      "h2",
+      { class: "title-name" },
+      book.title
+    ).createElement();
+
+    const author = new BookUI(
+      "h3",
+      { class: "author-name" },
+      `Author: ${book.author}`
+    ).createElement();
+
+    const pages = new BookUI(
+      "p",
+      { class: "page-num" },
+      `Pages: ${book.pages}`
+    ).createElement();
+
+    const statusBtn = new BookUI(
+      "button",
+      { class: "status-btn", type: "button", "data-book-id": book.id },
+      book.status
+    ).createElement();
+
+    const removeBtn = new BookUI(
+      "button",
+      { class: "remove-btn" },
+      "X"
+    ).createElement();
+
+    statusBtn.onclick = () => toggleBookStatus(book.id);
+    removeBtn.onclick = () => deleteBook(book.id);
+
+    card.append(title, author, pages, statusBtn, removeBtn);
+
+    return card;
+  }
+
+  displayBooks(myLibrary, libraryContainer, { toggleBookStatus, deleteBook }) {
+    libraryContainer.innerHTML = "";
+    myLibrary.forEach((book) => {
+      const bookCard = this.createBookCard(book, {
+        toggleBookStatus,
+        deleteBook,
+      });
+      libraryContainer.appendChild(bookCard);
+    });
   }
 }
 
-// Creating the book
-function createBookCard(book) {
-  const card = createElement("div", {
-    class: "book-card",
-    id: book.id,
-  });
+class LibraryManager {
+  constructor() {
+    this.myLibrary = [];
+    this.bookUI = new BookUI();
+  }
 
-  const title = createElement(
-    "h2",
-    {
-      class: "title-name",
-    },
-    book.title
-  );
-  const author = createElement(
-    "h3",
-    {
-      class: "author-name",
-    },
-    `Author: ${book.author}`
-  );
-  const pages = createElement(
-    "p",
-    {
-      class: "pages-num",
-    },
-    `Pages: ${book.pages}`
-  );
+  addBook(title, author, pages, status) {
+    const id = self.crypto.randomUUID(); // Generate random unique id for each books
+    const newBook = new Book(title, author, pages, status, id);
+    this.myLibrary.push(newBook);
+    this.displayBooks();
+  }
 
-  const statusBtn = createElement(
-    "button",
-    {
-      class: "status-btn",
-      type: "button",
-      "data-book-id": book.id,
-    },
-    book.status
-  );
+  deleteBook(id) {
+    this.myLibrary = this.myLibrary.filter((book) => book.id !== id);
+    this.displayBooks();
+  }
 
-  const removeBtn = createElement(
-    "button",
-    {
-      class: "remove-btn",
-    },
-    "X"
-  );
+  toggleBookStatus(bookId) {
+    const book = this.myLibrary.find((book) => book.id === bookId);
+    if (book) {
+      book.status = book.status === "Read" ? "Unread" : "Read";
+      this.displayBooks();
+    }
+  }
 
-  statusBtn.onclick = () => toggleBookStatus(book.id);
-  removeBtn.onclick = () => deleteBook(book.id);
-
-  card.append(title, author, pages, statusBtn, removeBtn);
-
-  return card;
+  displayBooks() {
+    this.bookUI.displayBooks(this.myLibrary, libraryContainer, {
+      toggleBookStatus: (id) => this.toggleBookStatus(id),
+      deleteBook: (id) => this.deleteBook(id),
+    });
+  }
 }
 
-// Display the book and append the card
-function displayBooks() {
-  libraryContainer.innerHTML = "";
-  myLibrary.forEach((book) => {
-    const bookCard = createBookCard(book);
-    libraryContainer.appendChild(bookCard);
-  });
+class LibraryFormHandler {
+  constructor(libraryManager) {
+    this.libraryManager = libraryManager;
+  }
+
+  handleFormSubmission() {
+    if (!authorValue.value || !bookValue.value || !pagesValue.value) {
+      alert("Please enter author, book name, and page number!");
+      return;
+    }
+
+    const status = readStatus.checked ? "Read" : "Unread";
+    this.libraryManager.addBook(
+      bookValue.value,
+      authorValue.value,
+      pagesValue.value,
+      status
+    );
+
+    this.resetForm();
+    showDialog.close();
+  }
+
+  resetForm() {
+    bookValue.value = "";
+    authorValue.value = "";
+    pagesValue.value = "";
+    readStatus.checked = false;
+  }
 }
 
-function resetForm() {
-  bookValue.value = "";
-  authorValue.value = "";
-  pagesValue.value = "";
-  readStatus.checked = false;
-}
+const libraryManager = new LibraryManager();
+const formHandler = new LibraryFormHandler(libraryManager);
 
-function initializeLibrary() {
-  addBookToLibrary("The Meditations", "Marcus Aurelius", 600, "Read");
-  addBookToLibrary("Talk Like Ted", "Carmine Gallo", 263, "Unread");
-
-  console.log(myLibrary);
-}
+libraryManager.addBook("1984", "George Orwell", 328, "Read");
+libraryManager.addBook("The Hobbit", "J.R.R. Tolkien", 310, "Unread");
 
 submitBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  handleFormSubmission();
+  formHandler.handleFormSubmission();
 });
 
 addButton.addEventListener("click", () => {
@@ -160,5 +174,3 @@ addButton.addEventListener("click", () => {
 closeBtn.addEventListener("click", () => {
   showDialog.close();
 });
-
-initializeLibrary();
